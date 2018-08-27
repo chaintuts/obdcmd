@@ -9,7 +9,7 @@ CORE_FILES=src/core/*.cpp
 INCLUDE_CORE=src/core
 
 BUILD_DIR=bin
-BUILD_BIN=obd.exe
+BUILD_BIN=obdcmd.exe
 
 CC=g++
 FLAGS=-std=c++11 -I$(INCLUDE_CORE)
