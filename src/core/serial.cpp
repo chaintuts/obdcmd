@@ -88,7 +88,7 @@ HANDLE SerialConnection::connect_com(const char* port_name)
 	DCB dcb;
 	if (GetCommState(com_file_handle, &dcb))
 	{
-		dcb.BaudRate = CBR_9600;
+		dcb.BaudRate = CBR_38400;
 		dcb.ByteSize = 8;
 		dcb.Parity = NOPARITY;
 		dcb.StopBits = ONESTOPBIT;
