@@ -31,15 +31,15 @@ void main_menu(ElmDevice elm_device)
 		std::string menu_cmd;
 		std::getline(std::cin, menu_cmd);
 		
-		if (menu_cmd == "dumpall")
+		if (menu_cmd == "dumpall" || menu_cmd == "da")
 		{
 			dump_all(elm_device);
 		}
-		else if (menu_cmd == "help")
+		else if (menu_cmd == "help" || menu_cmd == "h")
 		{
 			show_help();
 		}
-		else if (menu_cmd == "quit")
+		else if (menu_cmd == "quit" || menu_cmd == "q")
 		{
 			exit(0);
 		}
