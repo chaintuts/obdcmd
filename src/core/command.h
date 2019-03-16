@@ -34,6 +34,7 @@ class Command
 		static const char CMD_GET_THROTTLE_POS[];
 		
 		static const char RET_NO_DATA[];
+		static const char RET_EMPTY[];
 
 		// Declare an enum of supported commands
 		enum COMMAND { GET_DTCS,

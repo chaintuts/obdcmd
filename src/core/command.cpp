@@ -16,8 +16,9 @@ const char Command::CMD_GET_VEHICLE_SPEED[] = "010D\r";
 const char Command::CMD_GET_THROTTLE_POS[] = "0111\r";
 
 const char Command::RET_NO_DATA[] = "NO DATA";
+const char Command::RET_EMPTY[] = "";
 
- std::map<char, std::string> Command::dtc_prefixes = { 
+std::map<char, std::string> Command::dtc_prefixes = { 
 			{ '0', "P0" },
 			{ '1', "P1" },
 			{ '2', "P2" },
@@ -108,11 +109,18 @@ std::string Command::interpret_dtcs(std::string trimmed_data)
 {
 	std::vector<std::string> raw_dtcs;
 	std::vector<std::string> dtc_strings;
-	
-	raw_dtcs.push_back(trimmed_data.substr(0,4));
-	raw_dtcs.push_back(trimmed_data.substr(4,4));
-	raw_dtcs.push_back(trimmed_data.substr(8,4));
-	
+
+	if (trimmed_data.length() >= 12)
+	{
+		raw_dtcs.push_back(trimmed_data.substr(0,4));
+		raw_dtcs.push_back(trimmed_data.substr(4,4));
+		raw_dtcs.push_back(trimmed_data.substr(8,4));
+	}
+	else
+	{
+		return RET_EMPTY;
+	}
+
 	// Parse each raw DTC
 	std::vector<std::string>::iterator it;
 	for (it = raw_dtcs.begin(); it != raw_dtcs.end(); it++)
