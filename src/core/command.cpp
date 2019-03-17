@@ -122,6 +122,7 @@ std::string Command::interpret_dtcs(std::string trimmed_data)
 	}
 
 	// Parse each raw DTC
+	std::regex dtc_regex("[PCBU][0123]\\d{3}");
 	std::vector<std::string>::iterator it;
 	for (it = raw_dtcs.begin(); it != raw_dtcs.end(); it++)
 	{
@@ -133,7 +134,14 @@ std::string Command::interpret_dtcs(std::string trimmed_data)
 			char prefix_char = (*it)[0];
 			std::string dtc = dtc_prefixes[prefix_char] + (*it).substr(1);
 			
-			dtc_strings.push_back(dtc);
+			/* Before pushing the DTC to the list, check and ensure
+			* that it's actually a valid trouble code. Some cars can
+			* return nonzero garbage that should be excluded
+			*/
+			if (std::regex_match(dtc, dtc_regex))
+			{
+				dtc_strings.push_back(dtc);
+			}
 		}
 	}
 	

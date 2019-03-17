@@ -11,6 +11,7 @@
 #include <string>
 #include <sstream>
 #include <cmath>
+#include <regex>
 #include <boost/algorithm/string/erase.hpp>
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/algorithm/string/join.hpp>
