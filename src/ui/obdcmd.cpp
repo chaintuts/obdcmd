@@ -8,11 +8,24 @@
 #include "obdcmd.h"
 
 // This function is the main entry point for the program
-int main()
+int main(int argc, char* argv[])
 {
+	// Retrieve the serial port from the command line
+	std::string port = "";
+
+	if (argc > 1)
+	{
+		port = std::string(argv[1]);
+	}
+	else
+	{
+		std::cout << "Usage obdcmd [required: <serial port>]\n";
+		exit(EXIT_FAILURE);
+	}
+
 	// Declare an ElmDevice instance that will initialize the connection via its constructor
 	std::cout << "Initializing settings (this may take a moment)...";
-	ElmDevice elm_device;
+	ElmDevice elm_device(port);
 	std::cout << "Done!" << std::endl;
 	
 	// Enter the main menu

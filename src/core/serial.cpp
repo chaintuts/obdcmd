@@ -7,10 +7,10 @@
 #include "serial.h"
 
 // This constructor initializes the OS-dependent serial connection
-SerialConnection::SerialConnection()
+SerialConnection::SerialConnection(std::string port)
 {
 	#ifdef WINDOWS
-		com_file_handle = connect_com("COM3");
+		com_file_handle = connect_com(port.c_str());
 	#endif
 }
 

@@ -16,12 +16,13 @@
 class ElmDevice
 {
 	private:
-		SerialConnection connection;
+		SerialConnection* connection;
 
 		void init_settings();
 		
 	public:
-		ElmDevice();
+		ElmDevice(std::string port);
+		~ElmDevice();
 		std::string get_data(Command::COMMAND cmd);
 		
 

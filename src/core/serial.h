@@ -26,7 +26,7 @@ class SerialConnection
 	* these public functions
 	*/
 	public:
-		SerialConnection();
+		SerialConnection(std::string port);
 		void clear_serial();
 		void close_serial();
 		std::string fetch_response(std::string command, unsigned long expected_response_size);
