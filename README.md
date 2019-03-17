@@ -28,7 +28,7 @@ Clean the build directory
 * NOTE: The utility may take a moment to initialize settings on startup
 
 ### Requirements
-* Requires a connected ELM327 device on virtual serial port `COM3`
+* Requires a connected ELM327 device on a virtual serial port`
 
 ### Platforms
 * Windows
@@ -37,6 +37,7 @@ Clean the build directory
 ____________
 
 ### CLI Usage
+* Run `obdcmd.exe` with the serial port number specified. Ex: `obdcmd.exe COM3`
 * Enter `help` to show available commands
 * Enter `dumpall` to fetch and display current diagnostic information
 * Enter `quit` to exit the utility
