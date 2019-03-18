@@ -15,7 +15,7 @@ SerialConnection::SerialConnection(std::string port)
 }
 
 // This function closes the connection to the serial port
-void SerialConnection::close_serial()
+SerialConnection::~SerialConnection()
 {
 	#ifdef WINDOWS
 		CloseHandle(com_file_handle);
@@ -36,7 +36,6 @@ std::string SerialConnection::fetch_response(std::string command, unsigned long 
 		if (! write_success)
 		{
 			std::cout << "Unable to send command to OBDII device\n";
-			close_serial();
 			exit(1);
 		}
 		
@@ -52,17 +51,10 @@ std::string SerialConnection::fetch_response(std::string command, unsigned long 
 		if (! read_success)
 		{
 			std::cout << "Unable to read response from OBDII device\n";
-			close_serial();
 			exit(1);
 		}
 		
 		std::string response_string(buffer);
-		
-		/*
-		if (response_string.length() == 0)
-		{
-			std::cout << "Empty response received from OBDII device\n";
-		}*/
 		
 		return std::string(buffer);
 	#endif

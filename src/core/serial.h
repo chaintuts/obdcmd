@@ -27,8 +27,7 @@ class SerialConnection
 	*/
 	public:
 		SerialConnection(std::string port);
-		void clear_serial();
-		void close_serial();
+		~SerialConnection();
 		std::string fetch_response(std::string command, unsigned long expected_response_size);
 
 	private:

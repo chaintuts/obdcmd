@@ -28,7 +28,7 @@ Clean the build directory
 * NOTE: The utility may take a moment to initialize settings on startup
 
 ### Requirements
-* Requires a connected ELM327 device on a virtual serial port`
+* Requires a connected ELM327 device on a virtual serial port
 
 ### Platforms
 * Windows
