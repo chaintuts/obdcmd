@@ -19,7 +19,9 @@
 class SerialConnection
 {
 	private:
-		HANDLE com_file_handle;
+		#ifdef WINDOWS
+			HANDLE com_file_handle;
+		#endif
 	
 	/* The following functions are designed to provide a common API for serial code across operating systems
 	* When the code is compiled, regardless of OS, the other code in this program should be able to call
@@ -33,7 +35,9 @@ class SerialConnection
 	private:
 	
 		// The following functions are specific to this Windows OS implementation
-		HANDLE connect_com(const char* port_name);
+		#ifdef WINDOWS
+			HANDLE connect_com(const char* port_name);
+		#endif
 	
 };
 

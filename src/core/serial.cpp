@@ -61,6 +61,7 @@ std::string SerialConnection::fetch_response(std::string command, unsigned long 
 }
 
 // This function establishes a connection to the COM (serial) port hosting the OBDII reader
+#ifdef WINDOWS
 HANDLE SerialConnection::connect_com(const char* port_name)
 {
 	/* Use non-overlapping I/O for this COM port connection
@@ -111,3 +112,4 @@ HANDLE SerialConnection::connect_com(const char* port_name)
 	
 	return com_file_handle;
 }
+#endif
