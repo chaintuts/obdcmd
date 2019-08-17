@@ -9,17 +9,15 @@
 // This constructor initializes the OS-dependent serial connection
 SerialConnection::SerialConnection(std::string port)
 {
-	#ifdef WINDOWS
-		com_file_handle = connect_com(port.c_str());
-	#endif
+	serial_port = new boost::asio::serial_port(io);
+	connect_asio_port(port.c_str());
 }
 
 // This function closes the connection to the serial port
 SerialConnection::~SerialConnection()
 {
-	#ifdef WINDOWS
-		CloseHandle(com_file_handle);
-	#endif
+	serial_port -> close();
+	delete serial_port;
 }
 
 /* This function fetches the response to a command via the Windows serial port connection
@@ -28,88 +26,58 @@ SerialConnection::~SerialConnection()
 */
 std::string SerialConnection::fetch_response(std::string command, unsigned long expected_response_size)
 {
-	#ifdef WINDOWS
-		// First, send the command to the ELM327
-		unsigned long bytes_sent_total = command.length();
-		int write_success = WriteFile(com_file_handle, command.c_str(), command.length(), &bytes_sent_total, 0);
+	// First, send the command to the ELM327
+	unsigned long bytes_sent_total = command.length();
+	boost::asio::write(*serial_port, boost::asio::buffer(command.c_str(), bytes_sent_total));
+
+	char buffer[100];
+	memset(buffer, 0, sizeof(buffer));
+	
+	// Read the response
+	int return_count = 0;
+	for (int i = 0; i < 100; i++)
+	{
+		char buffer_char;
+		boost::asio::read(*serial_port, boost::asio::buffer(&buffer_char, 1));
 		
-		if (! write_success)
+		buffer[i] = buffer_char;
+		if (buffer_char == '\n')
 		{
-			std::cout << "Unable to send command to OBDII device\n";
-			exit(1);
+			// ELM327 commands return 2 sets of carriage returns
+			// Ignore the first round to read to the end
+			if (return_count == 1)
+			{
+				break;
+			}
+			else
+			{
+				return_count++;
+			}
 		}
-		
-		/* Now read the response from the serial port
-		* We're doing non-overlapping IO so the ReadFile call will block until it times out
-		* Put the response in a temporary buffer, then copy to the reponse returned in the function parameters
-		*/
-		char buffer[100];
-		memset(buffer, 0, sizeof(buffer));
-		unsigned long resp_size = expected_response_size;
-		int read_success = ReadFile(com_file_handle, &buffer, 50, &resp_size, NULL);
-		
-		if (! read_success)
-		{
-			std::cout << "Unable to read response from OBDII device\n";
-			exit(1);
-		}
-		
-		std::string response_string(buffer);
-		
-		return std::string(buffer);
-	#endif
+	}
+	
+	return std::string(buffer);
 }
 
-// This function establishes a connection to the COM (serial) port hosting the OBDII reader
-#ifdef WINDOWS
-HANDLE SerialConnection::connect_com(const char* port_name)
+// This function establishes a connection to the serial port hosting the OBDII reader
+void SerialConnection::connect_asio_port(const char* port)
 {
-	/* Use non-overlapping I/O for this COM port connection
-	* This is limiting, but keeps things simple
-	* Any read/write operations on the port will be blocking
-	*/
-	HANDLE com_file_handle = CreateFile(port_name, GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, 0, 0);
-	if (com_file_handle == INVALID_HANDLE_VALUE)
+	try
+	{
+		serial_port -> open(port);
+		
+		serial_port -> set_option(boost::asio::serial_port_base::baud_rate(38400));
+		serial_port -> set_option(boost::asio::serial_port_base::character_size(8));
+		
+		boost::asio::serial_port_base::parity parity(boost::asio::serial_port_base::parity::none);
+		boost::asio::serial_port_base::stop_bits stop_bits(boost::asio::serial_port_base::stop_bits::one);
+
+		serial_port -> set_option(parity);
+		serial_port -> set_option(stop_bits);
+	}
+	catch (int e)
 	{
 		std::cout << "Unable to access OBDII device via serial port\n";
 		exit(1);
 	}
-	
-	/* Before returning the file handle, let's set the DCB configuration
-	* This structure sets the parameters the OS will use to communicate with the device
-	*/
-	DCB dcb;
-	if (GetCommState(com_file_handle, &dcb))
-	{
-		dcb.BaudRate = CBR_38400;
-		dcb.ByteSize = 8;
-		dcb.Parity = NOPARITY;
-		dcb.StopBits = ONESTOPBIT;
-		dcb.fBinary = TRUE;
-		dcb.fParity = TRUE;
-	}
-	else
-	{
-			std::cout << "Unable to fetch communication parameters from OBDII device\n";
-			exit(1);
-	}
-	
-	/* We also need to set timeouts so reads don't block indefinitely
-	* 3 seconds should be a good amount of time
-	*/
-	int timeoutMs = 3000;
-	
-	COMMTIMEOUTS timeouts;
-	if (GetCommTimeouts(com_file_handle, &timeouts))
-	{
-		timeouts.ReadTotalTimeoutConstant = timeoutMs;
-	}
-
-	if (!SetCommState(com_file_handle, &dcb) || !SetCommTimeouts(com_file_handle, &timeouts))
-	{
-		std::cout << "Unable to update communication parameters with OBDII device\n";
-	}
-	
-	return com_file_handle;
-}
-#endif
+}	
