@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-void main_menu(ElmDevice elm_device)
+void main_menu(ElmDevice &elm_device)
 {
 	std::cout << "Welcome! Enter 'help' for a list of commands\n";
 	while (true)
@@ -63,7 +63,7 @@ void main_menu(ElmDevice elm_device)
 	}
 }
 
-void dump_all(ElmDevice elm_device)
+void dump_all(ElmDevice &elm_device)
 {
 	std::cout << "Dumping all currently available OBDII data (this may take a moment)...\n";
 	
