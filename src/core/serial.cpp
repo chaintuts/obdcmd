@@ -39,20 +39,11 @@ std::string SerialConnection::fetch_response(std::string command, unsigned long 
 	{
 		char buffer_char;
 		boost::asio::read(*serial_port, boost::asio::buffer(&buffer_char, 1));
-		
 		buffer[i] = buffer_char;
-		if (buffer_char == '\n')
+
+		if (buffer_char == '>')
 		{
-			// ELM327 commands return 2 sets of carriage returns
-			// Ignore the first round to read to the end
-			if (return_count == 1)
-			{
-				break;
-			}
-			else
-			{
-				return_count++;
-			}
+			break;
 		}
 	}
 	
