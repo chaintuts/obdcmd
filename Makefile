@@ -6,7 +6,8 @@
 # This block defines makefile variables
 WINDOWS=windows
 LINUX=linux
-PLATFORM=$(LINUX)
+RPI_LINUX=rpi
+PLATFORM=$(RPI_LINUX)
 
 UI_FILES=src/ui/*.cpp
 CORE_FILES=src/core/*.cpp
@@ -20,6 +21,8 @@ FLAGS=-std=c++11 -I$(INCLUDE_CORE)
 
 ifeq ($(PLATFORM), $(WINDOWS))
 	LIB_FLAGS=-lws2_32
+else ifeq ($(PLATFORM), $(RPI_LINUX))
+	LIB_FLAGS=-lpthread -lboost_system
 else
 	LIB_FLAGS=-lboost_system
 endif
