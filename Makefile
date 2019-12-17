@@ -7,7 +7,7 @@
 WINDOWS=windows
 LINUX=linux
 RPI_LINUX=rpi
-PLATFORM=$(RPI_LINUX)
+PLATFORM=$(WINDOWS)
 
 UI_FILES=src/ui/*.cpp
 CORE_FILES=src/core/*.cpp
@@ -20,11 +20,11 @@ CC=g++
 FLAGS=-std=c++11 -I$(INCLUDE_CORE)
 
 ifeq ($(PLATFORM), $(WINDOWS))
-	LIB_FLAGS=-lws2_32
+	LIB_FLAGS=-lws2_32 -DWINDOWS
 else ifeq ($(PLATFORM), $(RPI_LINUX))
-	LIB_FLAGS=-lpthread -lboost_system
+	LIB_FLAGS=-lpthread -lboost_system -DLINUX
 else
-	LIB_FLAGS=-lboost_system
+	LIB_FLAGS=-lboost_system -DLINUX
 endif
 
 # This rule builds the utility

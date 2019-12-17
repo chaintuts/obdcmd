@@ -4,15 +4,24 @@
 */
 
 #include <iostream>
-
 #include "elm_device.h"
 
 void main_menu(ElmDevice &elm_device);
+void poll_loop(ElmDevice &elm_device, std::string cmd);
 void dump_item(ElmDevice &elm_device, std::string item);
 void dump_all(ElmDevice &elm_device);
 void show_help();
 
+// Available UI modes
+const std::string MODE_INTERACTIVE = "cmd";
+const std::string MODE_POLL = "poll";
+
+// Definitions for polling
+const int POLL_INTERVAL = 500;
+
 // Create maps of available command data to Command::COMMANDS, units, and labels
+const std::string COMMAND_ALL = "all";
+
 const int AVAILABLE_COMMANDS_SIZE = 5;
 std::string available_items[AVAILABLE_COMMANDS_SIZE] = { "dtc", "coo", "rpm", "spd", "thr" };
 

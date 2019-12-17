@@ -12,8 +12,16 @@ int main(int argc, char* argv[])
 {
 	// Retrieve the serial port from the command line
 	std::string port = "";
+	std::string mode = MODE_INTERACTIVE;
+	std::string cmd = COMMAND_ALL;
 
-	if (argc > 1)
+	if (argc == 3)
+	{
+		port = std::string(argv[1]);
+		mode = MODE_POLL;
+		cmd = std::string(argv[2]);
+	}
+	else if (argc == 2)
 	{
 		port = std::string(argv[1]);
 	}
@@ -28,9 +36,16 @@ int main(int argc, char* argv[])
 	ElmDevice elm_device(port);
 	std::cout << "Done!" << std::endl;
 	
-	// Enter the main menu
-	main_menu(elm_device);
-	
+	// Enter appropriate run loop
+	if (mode == MODE_INTERACTIVE)
+	{
+		main_menu(elm_device);
+	}
+	else
+	{
+		poll_loop(elm_device, cmd);
+	}
+
 	return 0;
 }
 
@@ -64,6 +79,29 @@ void main_menu(ElmDevice &elm_device)
 		{
 			std::cout << "Invalid command. Enter 'help' for a list of valid commands" << std::endl;
 		}
+	}
+}
+
+void poll_loop(ElmDevice &elm_device, std::string cmd)
+{
+	while (true)
+	{
+		if (cmd == COMMAND_ALL)
+		{
+			dump_all(elm_device);
+		}
+		else if (cmd_items.find(cmd) != cmd_items.end())
+		{
+			dump_item(elm_device, cmd);
+		}
+
+		#ifdef WINDOWS
+			Sleep(POLL_INTERVAL);
+		#endif
+		
+		#ifdef LINUX
+			usleep(POLL_INTERVAL);
+		#endif
 	}
 }
 
