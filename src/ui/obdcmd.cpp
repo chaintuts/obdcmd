@@ -88,11 +88,11 @@ void poll_loop(ElmDevice &elm_device, std::string cmd)
 	{
 		if (cmd == COMMAND_ALL)
 		{
-			dump_all(elm_device);
+			dump_all_poll(elm_device);
 		}
 		else if (cmd_items.find(cmd) != cmd_items.end())
 		{
-			dump_item(elm_device, cmd);
+			dump_item_poll(elm_device, cmd);
 		}
 
 		#ifdef WINDOWS
@@ -113,6 +113,14 @@ void dump_item(ElmDevice &elm_device, std::string item)
 	std::cout << cmd_labels[item] << data << cmd_units[item] << std::endl;
 }
 
+void dump_item_poll(ElmDevice &elm_device, std::string item)
+{
+	std::string data = elm_device.get_data(cmd_items[item]);
+
+	std::cout << "\033[2J";
+	std::cout << cmd_labels[item] << data << cmd_units[item];
+}
+
 void dump_all(ElmDevice &elm_device)
 {
 	std::cout << "Dumping all currently available OBDII data...\n";
@@ -125,6 +133,19 @@ void dump_all(ElmDevice &elm_device)
 	}
 }
 
+void dump_all_poll(ElmDevice &elm_device)
+{
+	std::string output = "";
+	for (int i = 0; i < AVAILABLE_COMMANDS_SIZE; i++)
+	{
+		std::string item = available_items[i];
+		std::string data = elm_device.get_data(cmd_items[item]);
+		output += cmd_labels[item] + data + cmd_units[item] + "\n";
+	}
+
+	std::cout << "\033[2J";
+	std::cout << output;
+}
 void show_help()
 {
 	std::cout << "'dumpall'\t\tDump all available OBDII data:\n";
