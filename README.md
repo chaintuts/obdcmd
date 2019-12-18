@@ -38,6 +38,9 @@ ____________
 
 ### CLI Usage
 * Run `obdcmd.exe` with the serial port number specified. Ex: `obdcmd.exe COM3`
+* Omit arguments after the port to enter the interactive menu
+* Or, specify `<command>` or `all` after the port to enter polling mode
 * Enter `help` to show available commands
 * Enter `dumpall` to fetch and display current diagnostic information
+* Enter `<command>` to dump just one diagnostic item
 * Enter `quit` to exit the utility
