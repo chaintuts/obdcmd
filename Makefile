@@ -7,7 +7,7 @@
 WINDOWS=windows
 LINUX=linux
 RPI_LINUX=rpi
-PLATFORM=$(WINDOWS)
+PLATFORM=$(RPI_LINUX)
 
 UI_FILES=src/ui/*.cpp
 CORE_FILES=src/core/*.cpp

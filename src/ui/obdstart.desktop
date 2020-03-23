@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Name=OBD Command Line
+Exec=lxterminal -e 'cd /home/pi/obdcmd/bin/ && ./obdcmd /dev/ttyUSB0 all'

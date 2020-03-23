@@ -117,7 +117,7 @@ void dump_item_poll(ElmDevice &elm_device, std::string item)
 {
 	std::string data = elm_device.get_data(cmd_items[item]);
 
-	std::cout << "\033[2J";
+	std::cout << "\033[2J\033[H";
 	std::cout << cmd_labels[item] << data << cmd_units[item];
 }
 
@@ -143,7 +143,7 @@ void dump_all_poll(ElmDevice &elm_device)
 		output += cmd_labels[item] + data + cmd_units[item] + "\n";
 	}
 
-	std::cout << "\033[2J";
+	std::cout << "\033[2J\033[H";
 	std::cout << output;
 }
 void show_help()
