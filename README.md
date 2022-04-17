@@ -32,6 +32,8 @@ Clean the build directory
 
 ### Platforms
 * Windows
+* Linux
+* Raspberry Pi
 
 ## Usage
 ____________
