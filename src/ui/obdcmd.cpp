@@ -31,6 +31,13 @@ int main(int argc, char* argv[])
 		exit(EXIT_FAILURE);
 	}
 
+    // Show command/help information directly from the command line
+    if (port == "--help" || port == "-h")
+    {
+        show_help();
+        exit(0);
+    }
+
 	// Declare an ElmDevice instance that will initialize the connection via its constructor
 	std::cout << "Initializing settings (this may take a moment)...";
 	ElmDevice elm_device(port);
