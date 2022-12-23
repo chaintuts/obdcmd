@@ -46,3 +46,10 @@ ____________
 * Enter `dumpall` to fetch and display current diagnostic information
 * Enter `<command>` to dump just one diagnostic item
 * Enter `quit` to exit the utility
+
+### Diagnostic Information
+* Modern vehicles use OBDII for diagnostic codes. 
+* This tool should provide most standard OBDII codes.
+* Pre-1996 cars may use OBDI standards that vary by manufacturer, not supported by this tool
+* Many OBDI codes can be pulled by placing a jumper wire across specified ports and watching check engine light flashes
+* Plugging these codes into a search engine or code search application for information pertaining to your project!
